@@ -34,7 +34,7 @@ app.get("/api/1451001600000", (req, res) => {
 
 // defined a new route for date parameter
 
-app.get("/api/:date?", (req, res) => {
+app.get("/api/:date", (req, res) => {
   const myDate = req.params.date;
   let [year, month, day] = myDate.split("-").map(Number);
 
