@@ -36,16 +36,18 @@ app.get("/api/1451001600000", (req, res) => {
 
 app.get("/api/:date", (req, res) => {
   const myDate = req.params.date;
-  let parsedDate = new Date(Date.UTC(...myDate.split("-").map(Number)));
+  let [year, month, day] = myDate.split("-").map(Number);
 
-  if (!isNaN(parsedDate)) {
+  if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+    const date = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+    if (!isNaN(date)) {
+      const unixTimestamp = date.getTime();
+      date.setUTCHours(0, 0, 0, 0);
+      const utcTimestamp = date.toUTCString();
+      res.json({ unix: unixTimestamp, utc: utcTimestamp });
+    }
+
     
-    const unixTimestamp = parsedDate.getTime();
-    parsedDate.setUTCMonth(parsedDate.getUTCMonth()-1)
-    parsedDate.setUTCHours(0, 0, 0, 0);
-    const utcTimestamp = parsedDate.toUTCString();
-
-    res.json({ unix: unixTimestamp, utc: utcTimestamp });
   } else {
     res.json({ error: "Invalid Date" });
   }
