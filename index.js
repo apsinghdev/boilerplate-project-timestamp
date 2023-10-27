@@ -40,14 +40,14 @@ app.get("/api/:date", (req, res) => {
 
   if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
     const date = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
-    if (!isNaN(date)) {
+    if (Number.isNaN(date)) {
+      res.json({ error: "Invalid Date" });
+    } else {
       const unixTimestamp = date.getTime();
       date.setUTCHours(0, 0, 0, 0);
       const utcTimestamp = date.toUTCString();
       res.json({ unix: unixTimestamp, utc: utcTimestamp });
     }
-
-    
   } else {
     res.json({ error: "Invalid Date" });
   }
